@@ -14,10 +14,12 @@ const relative = /^\.{1,2}\//
  *
  * @type {import('unified').Plugin<void[], Root>}
  */
-export default function embedImages() {
+export default function embedImages(options) {
   return (tree, file, done) => {
     let count = 0
-    const base = file.dirname ? path.resolve(file.cwd, file.dirname) : file.cwd
+
+    const { basePath } = options
+    const base = basePath ? basePath : (file.dirname ? path.resolve(file.cwd, file.dirname) : file.cwd)
 
     visit(tree, 'image', (node) => {
       if (node.url && relative.test(node.url)) {
